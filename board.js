@@ -39,7 +39,9 @@ class Board {
             
         }
         for (let i = 0; i < this.pieces.length; i++) {
-            this.pieces[i].draw(this.tileSize);
+            if(this.pieces[i] != null){
+                this.pieces[i].draw(this.tileSize);
+            }
             
         }
     }

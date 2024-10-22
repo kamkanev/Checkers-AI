@@ -36,6 +36,8 @@ function mouseup() {
 
     if(selectedTile){
         var moves = getPointsFromMovements();
+        //console.log(moves);
+        
         for(var i =0; i < moves.length; i++){
             if(mousePoint.isEqual(board.pieces[chosenPiece].position.addOffset(moves[i].x, moves[i].y))){
                 movePiece(moves[i]);
@@ -50,7 +52,7 @@ function mouseup() {
     selectedTile = false;
         if (!(mousePoint.x > board.size - 1 || mousePoint.x < 0 || mousePoint.y > board.size - 1 || mousePoint.y < 0)){
         
-            console.log("In board")
+            //console.log("In board")
             for(var i =0; i < board.pieces.length; i++){
                 if(mousePoint.isEqual(board.pieces[i].position)){
                     selectedTile = true;
@@ -63,7 +65,7 @@ function mouseup() {
         }
 
         if(selectedTile){
-            console.log(mousePoint.toString())
+            //console.log(mousePoint.toString())
         }else{
             mousePoint.x = mousePoint.y = -1;
             chosenPiece = -1;
@@ -75,16 +77,34 @@ function mouseup() {
  * TODO attack
  */
 function movePiece(move){
+    
     board.pieces[chosenPiece].position = board.pieces[chosenPiece].position.addOffset(move.x, move.y);
+    if(!board.pieces[chosenPiece].isKing &&
+         ( (board.pieces[chosenPiece].position.y == 0 && board.pieces[chosenPiece].color == 0) ||
+            (board.pieces[chosenPiece].position.y == board.size - 1 && board.pieces[chosenPiece].color == 1) )){
+                board.pieces[chosenPiece].isKing = true;
+                // reward maybe +1.5
+            }
+    
+    if(move.enemies){
+        // for (let i = 0; i < move.enemies.length; i++) {
+        //     //board.pieces[move.enemies[i]] = null;
+            
+        // }
+        board.pieces = board.pieces.filter((value, index) => !move.enemies.includes(index));
+    }
 }
 
 function getPointsFromMovements(){
     var movePoints = [];
     chosenMoves.forEach(m => {
-        var pm = Move.StringToPoint(m.str);
-        for(var i =0; i < pm.length; i++){
-            movePoints.push(pm[i]);
-        }
+        //var pm = Move.StringToPoint(m.str);//change to work for attack
+        //var p = Move.MoveToPoint(m);
+        //console.log("P:", p);
+        movePoints = movePoints.concat(Move.MoveToPoint(m));
+        // for(var i = 0; i < p.length; i++){
+        //     movePoints.push(p[i]);
+        // }
     });
 
     return movePoints;

@@ -3,7 +3,12 @@ class Piece {
         this.position = new Point(x, y);
         this.color = color;
         this.isKing = isKing;
-        this.drawSize = 30;
+        this.drawSize = 60;
+
+        this.image = new Image();
+        this.kingImage = new Image();
+        this.image.src = "imgs/" + (this.color == 0 ? "black" : "red") + "Piece.png";
+        this.kingImage.src = "imgs/kr.png"
     }
     /**
      * Get all avaible moves and attacks of a Piece
@@ -165,20 +170,23 @@ class Piece {
     draw(boardSize){
         context.fillStyle = this.color == 0 ? "grey" : "red";
         if(boardSize){
-            context.fillRect(this.position.x * boardSize + (boardSize-this.drawSize)/2,
+            // context.fillRect(this.position.x * boardSize + (boardSize-this.drawSize)/2,
+            //  this.position.y * boardSize + (boardSize-this.drawSize)/2,
+            //   this.drawSize, this.drawSize);
+            context.drawImage(this.image, this.position.x * boardSize + (boardSize-this.drawSize)/2,
              this.position.y * boardSize + (boardSize-this.drawSize)/2,
               this.drawSize, this.drawSize);
 
         }else{
             
-            context.fillRect(this.position.x, this.position.y, this.drawSize, this.drawSize);
+            context.fillRect(this.image, this.position.x, this.position.y, this.drawSize, this.drawSize);
         }
 
         if(this.isKing){
             context.fillStyle = "black";
-            context.fillRect(this.position.x * boardSize + (boardSize-this.drawSize)/2 + this.drawSize/2 - 5,
-             this.position.y * boardSize + (boardSize-this.drawSize)/2 + + this.drawSize/2 - 5,
-              10, 10);
+            context.drawImage(this.kingImage, this.position.x * boardSize + (boardSize-this.drawSize)/2 + this.drawSize/2 - 15,
+             this.position.y * boardSize + (boardSize-this.drawSize)/2 + + this.drawSize/2 - 9,
+              30, 16);
         }
     }
 }

@@ -189,8 +189,10 @@ function drawMoves(moves){
     context.globalAlpha = 1;
 }
 
-function resetGame(){
+function resetGame(newSize = 6){
 
+    boardSizeInput = newSize;
+    board.size = newSize;
     board.generateStandartBoard();
      mousePoint = new Point(-1, -1);
      chosenPiece = -1;

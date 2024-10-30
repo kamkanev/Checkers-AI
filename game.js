@@ -7,13 +7,46 @@ var selectedTile = false;
 var chosenMoves = [];
 
 //turn variables
-var players = [1, 1];
+var players = [1, 0];
 var playerTurn = 0;
 var turnCount = 1;
 var endgame = false;
 var winner = -1;
 
+var QL = new QLearing();
+var reward = 0;
+
 function update() {
+
+    if(players[playerTurn] == 0){
+        //choose AI move
+        if(!checkLose()){
+            for(var i =0; i < board.pieces.length; i++){
+                if(board.pieces[i].color == playerTurn){
+                    // selectedTile = true;
+                    // chosenPiece = i;
+                    //put after AI selection ^
+                    chosenMoves = chosenMoves.concat(board.pieces[i].avaiableMoves(i, board.pieces, board.size));
+                    //console.log(chosenMoves);
+                    //break;
+                }
+            }
+            var moves = getPointsFromMovements();
+                //console.log(moves);
+                var action = QL.chooseAction(board.pieces, moves);
+                //selectedTile = true;
+                chosenPiece = action.id;
+                
+                movePiece(action);
+    
+    
+                mousePoint.x = mousePoint.y = -1;
+                chosenPiece = -1;
+                chosenMoves = [];
+                selectedTile = false;
+        }
+        
+    }
     
 }
 
@@ -56,10 +89,10 @@ function draw() {
             drawMoves(getPointsFromMovements());
         }
     }else{
-        context.fillStyle="grey";
-        context.font="60px Verdana";
+        context.fillStyle = (winner == 1) ? "red" : "blue" ;
+        context.font = "60px Verdana";
         context.fillText("Player " + winner + " wins!", 50, 250);
-        context.font="40px Verdana";
+        context.font = "40px Verdana";
         context.fillText("Press R to restart game!", 25, 300);
     }
 };
@@ -123,22 +156,37 @@ function mouseup() {
  * TODO attack
  */
 function movePiece(move){
+
+
+    var oldPieces = []
+    board.pieces.forEach(piece => {
+        oldPieces.push(piece.copy());
+    });
     
     board.pieces[chosenPiece].position = board.pieces[chosenPiece].position.addOffset(move.x, move.y);
     if(!board.pieces[chosenPiece].isKing &&
          ( (board.pieces[chosenPiece].position.y == 0 && board.pieces[chosenPiece].color == 0) ||
             (board.pieces[chosenPiece].position.y == board.size - 1 && board.pieces[chosenPiece].color == 1) )){
                 board.pieces[chosenPiece].isKing = true;
-                // reward maybe +1.5
+                reward += 1.5; //for kinging
             }
     
     if(move.enemies){
-        // for (let i = 0; i < move.enemies.length; i++) {
-        //     //board.pieces[move.enemies[i]] = null;
+        for (let i = 0; i < move.enemies.length; i++) {
+            reward += 1; //for taken Piece
             
-        // }
+        }
+        
         board.pieces = board.pieces.filter((value, index) => !move.enemies.includes(index));
+        
     }
+
+    if(players[playerTurn] == 0){
+        //console.log(oldPieces, board.pieces);
+        QL.updateQValue(oldPieces, board.pieces, move, reward);
+    }
+
+    
 
     playerTurn = (playerTurn + 1) % 2;
     if(checkLose()){
@@ -157,6 +205,7 @@ function checkLose(){
             }
         }
     }
+    reward -= 1000;
     return true;
 }
 
@@ -176,8 +225,8 @@ function getPointsFromMovements(){
 }
 
 function drawMoves(moves){
-    context.fillStyle = "red";
-    context.globalAlpha = 0.4;
+    context.fillStyle = "#00ff00";
+    context.globalAlpha = 0.5;
 
     for(var i = 0; i < moves.length; i++){
 

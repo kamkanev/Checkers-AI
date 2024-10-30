@@ -58,10 +58,18 @@ class Move {
         }else{
             var currP = new Point(0, 0);
             for(var i = 0; i < mp.length; i++){
-                points.push({x: mp[i].x*2 + currP.x, y: mp[i].y*2 + currP.y, enemies: move.deffendingIds});
+                points.push(
+                    {x: mp[i].x*2 + currP.x,
+                     y: mp[i].y*2 + currP.y,
+                     enemies: move.deffendingIds}
+                    );
                 currP.x = mp[i].x*2;
                 currP.y = mp[i].y*2;
             }
+        }
+
+        for(var i = 0; i < points.length; i++){
+            points[i].id = move.id;
         }
 
         return points;

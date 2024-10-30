@@ -1,4 +1,11 @@
 class Piece {
+    /**
+     * Constructor of the class
+     * @param {number} x position on X axis
+     * @param {number} y position on Y axis
+     * @param {number} color 0 for black and 1 for red Pieces
+     * @param {boolean} isKing Is the Piece a King
+     */
     constructor(x, y, color = 0, isKing = false) {
         this.position = new Point(x, y);
         this.color = color;
@@ -14,7 +21,7 @@ class Piece {
      * Get all avaible moves and attacks of a Piece
      * @param {number} id index of the current piece in the pieces array
      * @param {Array of Piece} pieces array of all pieces need to calculate moves and attacks
-     * @param {number} boardSize size of the board (example. 8x8)
+     * @param {number} boardSize size of the board (example. 8 means board 8x8)
      * @returns {Array of Move} all avaible moves for this piece
      */
     avaiableMoves(id = -1, pieces, boardSize){
@@ -77,7 +84,7 @@ class Piece {
             }
 
         //Checka avaiable attacks (maybe recurcive)
-        //TODO
+        //BUG MAYBE HERE FIX LATER
         var attackIn = [];
         var attackOut = [];
         if(this.color == 0 || (this.color == 1 && this.isKing)){
@@ -167,6 +174,14 @@ class Piece {
 
     }
 
+    copy(){
+        return new Piece(this.x, this.y, this.color, this.isKing);
+    }
+
+    /**
+     * Draws the Piece
+     * @param {number} boardSize Size of the board
+     */
     draw(boardSize){
         context.fillStyle = this.color == 0 ? "grey" : "red";
         if(boardSize){

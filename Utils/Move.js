@@ -1,4 +1,14 @@
+/**
+ * MOVE class
+ */
 class Move {
+
+    /**
+     * Constructor of the class
+     * @param {number} PieceId the index of a Pice in the board.pieces array
+     * @param {string} type "A" for attack move and "M" for simple move
+     * @param {string} movementString string indicating the move pathern of the Piece
+     */
     constructor(PieceId, type = "A", movementString) {
         this.id = PieceId;
         this.type = type;
@@ -6,6 +16,11 @@ class Move {
         this.deffendingIds = []
     }
 
+    /**
+     * Creates a new instance/copy of the object
+     * @param {string} string a new string to be added to the instance
+     * @returns {Move} a new instance the similar to the original one
+     */
     copy(string = ""){
         var res = new Move(this.id, this.type, this.str);
         res.deffendingIds = res.deffendingIds.concat(this.deffendingIds);

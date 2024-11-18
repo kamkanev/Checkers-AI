@@ -13,6 +13,7 @@ var turnCount = 1;
 var endgame = false;
 var winner = -1;
 
+//RL variables
 var QL = new QLearing();
 var reward = 0;
 
@@ -151,12 +152,12 @@ function mouseup() {
             }
     }
 };
-/***
- * Only for moving for now
- * TODO attack
+
+/**
+ * Apply a Move to the chosen Piece and check to collect opponent Pieces
+ * @param {Move} move A Move where to move a piece at
  */
 function movePiece(move){
-
 
     var oldPieces = []
     board.pieces.forEach(piece => {
@@ -198,6 +199,10 @@ function movePiece(move){
     turnCount++;
 }
 
+/**
+ * Checks if the current player loses the game
+ * @returns {boolean} true if the current player loses the game
+ */
 function checkLose(){
     for(var i = 0; i < board.pieces.length; i++){
         if(board.pieces[i].color == playerTurn){
@@ -225,6 +230,10 @@ function getPointsFromMovements(){
     return movePoints;
 }
 
+/**
+ * Draws the moves on the board
+ * @param {Array of Move} moves array of moves on the board to be drawn
+ */
 function drawMoves(moves){
     context.fillStyle = "#00ff00";
     context.globalAlpha = 0.5;
@@ -239,6 +248,10 @@ function drawMoves(moves){
     context.globalAlpha = 1;
 }
 
+/**
+ * The function resets the game variables to start a new game
+ * @param {number} newSize the size of the new board
+ */
 function resetGame(newSize = 6){
 
     boardSizeInput = newSize;
@@ -249,7 +262,7 @@ function resetGame(newSize = 6){
      selectedTile = false;
      chosenMoves = [];
 
-     players = [1, 0]; // chnage later
+     //players = [1, 0]; // change later
      playerTurn = 0;
      turnCount = 1;
      endgame = false;

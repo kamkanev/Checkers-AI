@@ -1,4 +1,8 @@
+/**
+ * PIECE class
+ */
 class Piece {
+
     /**
      * Constructor of the class
      * @param {number} x position on X axis
@@ -17,6 +21,8 @@ class Piece {
         this.image.src = "imgs/" + (this.color == 0 ? "black" : "red") + "Piece.png";
         this.kingImage.src = "imgs/kr.png"
     }
+
+
     /**
      * Get all avaible moves and attacks of a Piece
      * @param {number} id index of the current piece in the pieces array
@@ -104,6 +110,8 @@ class Piece {
 
         return moves;
     }
+
+
     /**
      * Check attacks of a Specific Piece
      * @param {Array of Move} result returns the result
@@ -174,6 +182,10 @@ class Piece {
 
     }
 
+    /**
+     * Creates a new instance of the Piece and copies information
+     * @returns {Piece}
+     */
     copy(){
         return new Piece(this.x, this.y, this.color, this.isKing);
     }

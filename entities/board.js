@@ -1,4 +1,12 @@
+/**
+ * BOARD class
+ */
 class Board {
+
+    /**
+     * Constructor of the class
+     * @param {number} size board of what size we what to be (how many squares on each side)
+     */
     constructor(size = 8) {
         this.size = size;
         this.pieces = [];
@@ -6,6 +14,10 @@ class Board {
         this.generateStandartBoard();
     }
 
+
+    /**
+     * Generates a new Board with Pieces using infoarmation from the constructor
+     */
     generateStandartBoard(){
         this.pieces = [];
         var numberOfRowWithPieces = this.size == 8 ? 3 : (this.size == 6 ? 2 : 1);
@@ -26,6 +38,11 @@ class Board {
         }
     }
 
+    /**
+     * Draws the board and the Piece if any
+     * @param {string} whiteColor color for the white Squares
+     * @param {string} blackColor color for the black Squares
+     */
     draw(whiteColor = "#f8e7bb", blackColor = "#660000"){
         for(let y = 0; y < this.size; y++) {
             for(let x = 0; x < this.size; x++){

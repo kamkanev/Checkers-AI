@@ -194,6 +194,7 @@ function movePiece(move){
         endgame = true;
         return;
     }
+    reward = 0;
     turnCount++;
 }
 
@@ -248,9 +249,10 @@ function resetGame(newSize = 6){
      selectedTile = false;
      chosenMoves = [];
 
-     players = [1, 1]; // chnage later
+     players = [1, 0]; // chnage later
      playerTurn = 0;
      turnCount = 1;
      endgame = false;
      winner = -1;
+     reward = 0;
 }

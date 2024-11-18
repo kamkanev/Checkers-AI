@@ -4,7 +4,7 @@ class QLearing {
         this.learingRate = 0.1;
         this.explorationRate = 1.0;
         this.explorationDecay = 0.99;
-        this.changingFactor = 0.3;
+        this.discountFactor = 0.3;
     }
 
     chooseAction(state, actions){
@@ -41,7 +41,7 @@ class QLearing {
 
         var currQValue = this.qTable[state][action] || 0;
         var maxFutureQValue = Math.max(...Object.values(this.qTable[newState]));
-        var newQValue = currQValue + this.learingRate * (reward + maxFutureQValue * this.changingFactor - currQValue);
+        var newQValue = currQValue + this.learingRate * (reward + maxFutureQValue * this.discountFactor - currQValue);
         this.qTable[state][action] = newQValue;
 
         this.explorationRate *= this.explorationRate;

@@ -18,6 +18,7 @@ class QLearing {
         var takenAction = actions[0];
         var bestQValue = this.qTable[state][takenAction] || 0;
         //console.log(bestQValue);
+        //console.log(this.qTable[state]);
         
 
         actions.forEach(action => {
@@ -43,17 +44,23 @@ class QLearing {
 
         var currQValue = this.qTable[state][action] || 0;
         var maxFutureQValue = 0; //Math.max(...Object.values(this.qTable[newState]));
-            this.qTable[newState].forEach(act => {
-                if(typeof act === "number"){
-                    maxFutureQValue = Math.max(maxFutureQValue, act);
+        //console.log(this.qTable[newState]);
+        
+            for(var act in this.qTable[newState]){
+                if(this.qTable[newState][act] > maxFutureQValue){
+                    maxFutureQValue = this.qTable[newState][act];
                 }
-            });
+                
+            }
         //console.log(maxFutureQValue, currQValue);
         
         var newQValue = currQValue + this.learingRate * (reward + maxFutureQValue * this.discountFactor - currQValue);
         this.qTable[state][action] = newQValue;
-
-        this.explorationRate *= this.explorationDecay;
+        
+        if(this.explorationRate > 0.01){
+            this.explorationRate *= this.explorationDecay;
+        }
+        
 
     }
 }

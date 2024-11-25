@@ -14,24 +14,31 @@ var endgame = false;
 var winner = -1;
 
 //RL variables
+var rngAgent = new RandomAgent();
 var QL = new QLearing();
 var reward = 0;
+
+var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 100);
+sim.run();
+console.log(sim.getWinRatios());
+
 
 function update() {
 
     if(players[playerTurn] == 0){
         //choose AI move
         if(!checkLose()){
-            for(var i =0; i < board.pieces.length; i++){
-                if(board.pieces[i].color == playerTurn){
-                    // selectedTile = true;
-                    // chosenPiece = i;
-                    //put after AI selection ^
-                    chosenMoves = chosenMoves.concat(board.pieces[i].avaiableMoves(i, board.pieces, board.size));
-                    //console.log(chosenMoves);
-                    //break;
-                }
-            }
+            // for(var i =0; i < board.pieces.length; i++){
+            //     if(board.pieces[i].color == playerTurn){
+            //         // selectedTile = true;
+            //         // chosenPiece = i;
+            //         //put after AI selection ^
+            //         chosenMoves = chosenMoves.concat(board.pieces[i].avaiableMoves(i, board.pieces, board.size));
+            //         //console.log(chosenMoves);
+            //         //break;
+            //     }
+            // }
+            chosenMoves = Piece.allAvaibleMoves(board.pieces, board.size, playerTurn);
             var moves = getPointsFromMovements();
                 //console.log(moves);
                 var action = QL.chooseAction(board.pieces, moves);

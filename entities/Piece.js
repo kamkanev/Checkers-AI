@@ -22,6 +22,25 @@ class Piece {
         this.kingImage.src = "imgs/kr.png"
     }
 
+    static allAvaibleMoves(pieces, boardSize, color){
+
+        var moves = [];
+        
+        for(var i =0; i < pieces.length; i++){
+            if(pieces[i].color == color){
+                // selectedTile = true;
+                // chosenPiece = i;
+                //put after AI selection ^
+                moves = moves.concat(pieces[i].avaiableMoves(i, pieces, boardSize));
+                //console.log(chosenMoves);
+                //break;
+            }
+        }
+
+        return moves;
+
+    }
+
 
     /**
      * Get all avaible moves and attacks of a Piece

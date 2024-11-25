@@ -6,7 +6,9 @@ class Simulation {
         this.number = simNumber;
         this.reward = 0;
         this.wins = [0, 0];
+
         //Add stop watch
+        this.performTime = new Array(simNumber);
     }
 
     simulate(swap = false){
@@ -16,43 +18,56 @@ class Simulation {
         var moves = [];
         var action;
         var colorSwap = (!swap) ? 0 : 1;
+        var turnAvrTime = [0, 0];
+        var turns = [0, 0];
 
         while(!this._checkLose(color)){
 
             moves = Simulation._getPointsFromMovements(Piece.allAvaibleMoves(this.board.pieces, this.board.size, color));
             if(color % 2 == colorSwap){
-                //stop watch for turn white
+                const start = performance.now();
                 action = this.whiteAgent.chooseAction(this.board.pieces, moves);
-                //
+                const end = performance.now();
+                turnAvrTime[(color + colorSwap) % 2] += (end - start);
             }else{
-                //stop watch for turn black
+                const start = performance.now();
                 action = this.blackAgent.chooseAction(this.board.pieces, moves);
-                //
+                const end = performance.now();
+                turnAvrTime[(color + colorSwap) % 2] += (end - start);
             }
 
             this._applyMove(action.id, action, color, colorSwap);
 
             turnNumber++;
+            turns[(color + colorSwap) % 2]++;
             color = (color + 1) % 2;
             this.reward = 0;
 
         }
+        turnAvrTime[0] /= turns[0];
+        turnAvrTime[1] /= turns[1];
 
-        this.wins[(color + 1) % 2]++;
+        this.wins[(color + 1 + colorSwap) % 2]++;
+
+        return turnAvrTime;
 
     }
 
     run(swap = false){
+
+        console.log("Start simulation ...");
+        
 
         this.wins = [0, 0];
 
         if(!swap){
 
             for (let i = 0; i < this.number; i++) {
+
+                console.log(i + " game is simutaing of " + this.number);
                 
-                //maybe stop watch
-                this.simulate();
-                //
+                
+                this.performTime[i] = this.simulate();
 
                 this.board.generateStandartBoard();
                 
@@ -61,26 +76,32 @@ class Simulation {
         }else{
 
             for (let i = 0; i < this.number/2; i++) {
+
+                console.log(i + " game is simutaing of " + this.number);
                 
-                //maybe stop watch
-                this.simulate();
-                //
+                this.performTime[i] = this.simulate();
 
                 this.board.generateStandartBoard();
                 
             }
 
+            console.log("Swap is performed!");
+            
+
             for (let i = this.number/2; i < this.number; i++) {
+
+                console.log(i + " game is simutaing of " + this.number);
                 
-                //maybe stop watch
-                this.simulate(true);
-                //
+                this.performTime[i] = this.simulate(true);
 
                 this.board.generateStandartBoard();
                 
             }
 
         }
+
+        console.log("End of simulation");
+        
 
         //maybe clear method
 
@@ -129,13 +150,13 @@ class Simulation {
         if(color % 2 == colorSwap){
             if(typeof this.whiteAgent.updateQValue === 'function'){
                 this.whiteAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward);
-                console.log("Updated Q value white");
+                //console.log("Updated Q value white");
                 
             }
         }else{
             if(typeof this.blackAgent.updateQValue === 'function'){
                 this.blackAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward);
-                console.log("Updated Q value black");
+                //console.log("Updated Q value black");
             }
         }
 
@@ -159,5 +180,14 @@ class Simulation {
         wr[1] /= this.number;
 
         return wr;
+    }
+
+    getPerformanceInMicroSec(){
+        this.performTime.forEach( perf => {
+            perf[0] *= 1000;
+            perf[1] *= 1000;
+        });
+
+        return this.performTime;
     }
 }

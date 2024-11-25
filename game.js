@@ -18,7 +18,7 @@ var rngAgent = new RandomAgent();
 var QL = new QLearing();
 var reward = 0;
 
-var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 100);
+var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 10);
 sim.run();
 console.log(sim.getWinRatios());
 

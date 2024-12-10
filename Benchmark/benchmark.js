@@ -4,9 +4,38 @@ const ctx2 = document.getElementById('myChart2');
 var boardSizeInput = 6;
 
 var QL = new QLearing();
+QL.discountFactor = 0.3;
 
-var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 100);
+var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 300);
 sim.run();
+
+console.log(sim.getWinRatios());
+sim.number = 100;
+
+// console.log("An other training!");
+// sim.run();
+
+console.log("Real testing!!!");
+
+QL.epsilonMin = 0.05;
+sim.run();
+
+console.log(sim.getWinRatios());
+
+
+// QL.explorationDecay = 0.99;
+// QL.explorationRate = 1;
+// sim.number = 10;
+
+// sim.run();
+
+// console.log(sim.getWinRatios());
+
+// sim.number = 100;
+// QL.explorationRate = 0.1;
+// sim.run();
+
+// console.log(sim.getWinRatios());
 
 var performTime = sim.getPerformanceInMicroSec();
 
@@ -18,7 +47,7 @@ performTime.forEach(perf => {
     }
 })
 
-new Chart(ctx, {
+var perfchard = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ['1st gen', '2nd gen', '10th gen', '51th gen', '98th gen'],
@@ -38,11 +67,16 @@ new Chart(ctx, {
       y: {
         beginAtZero: true
       }
-    }
+    },
+    plugins: {
+        customCanvasBackgroundColor: {
+          color: 'white',
+        }
+      }
   }
 });
 
-new Chart(ctx2, {
+var winChard = new Chart(ctx2, {
     type: 'pie',
     data: {
       labels: ['Wins RNG', 'Wins Q-Learning'],
@@ -57,6 +91,23 @@ new Chart(ctx2, {
         y: {
           beginAtZero: true
         }
+      },
+      plugins: {
+        customCanvasBackgroundColor: {
+          color: 'white',
+        }
       }
     }
   });
+
+
+  function downloadChards(){
+    var a = document.createElement('a');
+    a.href = perfchard.toBase64Image();
+    a.download = 'perfChard.png';
+    a.click();
+
+    a.href = winChard.toBase64Image();
+    a.download = 'winChard.png';
+    a.click();
+  }

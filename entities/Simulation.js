@@ -4,7 +4,7 @@ class Simulation {
         this.whiteAgent = whiteAgent;
         this.blackAgent = blackAgent;
         this.number = simNumber;
-        this.reward = 0;
+        this.reward = Rewards.DEFAULT;
         this.wins = [0, 0];
 
         //Add stop watch
@@ -20,6 +20,8 @@ class Simulation {
         var colorSwap = (!swap) ? 0 : 1;
         var turnAvrTime = [0, 0];
         var turns = [0, 0];
+
+        this.reward = Rewards.DEFAULT;
 
         while(!this._checkLose(color)){
 
@@ -41,9 +43,15 @@ class Simulation {
             turnNumber++;
             turns[(color + colorSwap) % 2]++;
             color = (color + 1) % 2;
-            this.reward = 0;
+            this.reward = Rewards.DEFAULT; //*= -1; //inverses to get neg rewards the oppenent
 
         }
+
+        //console.log(((color + 1) % 2) == 0 ? "white wins" : "black wins");
+        
+
+        this.reward = Rewards.DEFAULT;
+
         turnAvrTime[0] /= turns[0];
         turnAvrTime[1] /= turns[1];
 
@@ -64,10 +72,18 @@ class Simulation {
 
             for (let i = 0; i < this.number; i++) {
 
-                console.log(i + " game is simutaing of " + this.number);
+                console.log((i+1) + " game is simutaing of " + this.number);
                 
                 
                 this.performTime[i] = this.simulate();
+
+                if(typeof this.whiteAgent.decayEpsilon === "function"){
+                    this.whiteAgent.decayEpsilon();
+                }
+                if(typeof this.blackAgent.decayEpsilon === "function"){
+                    this.blackAgent.decayEpsilon();
+                    
+                }
 
                 this.board.generateStandartBoard();
                 
@@ -77,9 +93,16 @@ class Simulation {
 
             for (let i = 0; i < this.number/2; i++) {
 
-                console.log(i + " game is simutaing of " + this.number);
+                console.log((i+1) + " game is simutaing of " + this.number);
                 
                 this.performTime[i] = this.simulate();
+
+                if(typeof this.whiteAgent.decayEpsilon === "function"){
+                    this.whiteAgent.decayEpsilon();
+                }
+                if(typeof this.blackAgent.decayEpsilon === "function"){
+                    this.blackAgent.decayEpsilon();
+                }
 
                 this.board.generateStandartBoard();
                 
@@ -90,9 +113,16 @@ class Simulation {
 
             for (let i = this.number/2; i < this.number; i++) {
 
-                console.log(i + " game is simutaing of " + this.number);
+                console.log((i+1) + " game is simutaing of " + this.number);
                 
                 this.performTime[i] = this.simulate(true);
+
+                if(typeof this.whiteAgent.decayEpsilon === "function"){
+                    this.whiteAgent.decayEpsilon();
+                }
+                if(typeof this.blackAgent.decayEpsilon === "function"){
+                    this.blackAgent.decayEpsilon();
+                }
 
                 this.board.generateStandartBoard();
                 
@@ -135,12 +165,12 @@ class Simulation {
             ( (this.board.pieces[chosenPiece].position.y == 0 && this.board.pieces[chosenPiece].color == 0) ||
                 (this.board.pieces[chosenPiece].position.y == this.board.size - 1 && this.board.pieces[chosenPiece].color == 1) )){
                     this.board.pieces[chosenPiece].isKing = true;
-                    this.reward += 1.5; //for kinging
+                    this.reward += Rewards.KING; //for kinging
                 }
         
         if(move.enemies){
             for (let i = 0; i < move.enemies.length; i++) {
-                this.reward += 1; //for taken Piece
+                this.reward += this.board.pieces[move.enemies[i]].isKing ? Rewards.KING : Rewards.PERPIECE; //for taken Piece
                 
             }
             
@@ -170,7 +200,7 @@ class Simulation {
                 }
             }
         }
-        this.reward -= 1000;
+        this.reward -= Rewards.LOSE;
         return true;
     }
 

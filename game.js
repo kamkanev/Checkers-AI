@@ -16,9 +16,9 @@ var winner = -1;
 //RL variables
 var rngAgent = new RandomAgent();
 var QL = new QLearing();
-var reward = 0;
+var reward = Rewards.DEFAULT;
 
-var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 50);
+var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 25);
 sim.run();
 console.log(sim.getWinRatios());
 
@@ -176,12 +176,12 @@ function movePiece(move){
          ( (board.pieces[chosenPiece].position.y == 0 && board.pieces[chosenPiece].color == 0) ||
             (board.pieces[chosenPiece].position.y == board.size - 1 && board.pieces[chosenPiece].color == 1) )){
                 board.pieces[chosenPiece].isKing = true;
-                reward += 1.5; //for kinging
+                reward += Rewards.KING; //for kinging
             }
     
     if(move.enemies){
         for (let i = 0; i < move.enemies.length; i++) {
-            reward += 1; //for taken Piece
+            reward += board.pieces[move.enemies[i]].isKing ? Rewards.KING : Rewards.PERPIECE; //for taken Piece
             
         }
         
@@ -202,7 +202,7 @@ function movePiece(move){
         endgame = true;
         return;
     }
-    reward = 0;
+    reward *= -1;
     turnCount++;
 }
 
@@ -218,7 +218,7 @@ function checkLose(){
             }
         }
     }
-    reward -= 1000;
+    reward -= Rewards.LOSE;
     return true;
 }
 
@@ -274,5 +274,5 @@ function resetGame(newSize = 6){
      turnCount = 1;
      endgame = false;
      winner = -1;
-     reward = 0;
+     reward = Rewards.DEFAULT;
 }

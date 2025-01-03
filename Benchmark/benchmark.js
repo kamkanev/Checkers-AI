@@ -4,7 +4,6 @@ const ctx2 = document.getElementById('myChart2');
 var boardSizeInput = 6;
 
 var QL = new QLearing();
-QL.discountFactor = 0.3;
 
 var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 300);
 sim.run();
@@ -17,6 +16,8 @@ sim.number = 100;
 
 console.log("Real testing!!!");
 
+
+QL.explorationRate = 0.05;
 QL.epsilonMin = 0.05;
 sim.run();
 

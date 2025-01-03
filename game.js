@@ -18,9 +18,9 @@ var rngAgent = new RandomAgent();
 var QL = new QLearing();
 var reward = Rewards.DEFAULT;
 
-var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 25);
-sim.run();
-console.log(sim.getWinRatios());
+//var sim = new Simulation(new Board(boardSizeInput), new RandomAgent(), QL, 25);
+//sim.run();
+//console.log(sim.getWinRatios());
 
 
 function update() {

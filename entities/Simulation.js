@@ -177,6 +177,36 @@ class Simulation {
             this.board.pieces = this.board.pieces.filter((value, index) => !move.enemies.includes(index)); 
         }
 
+        if(this._checkLose(color)){
+            this.reward += Rewards.LOSE;
+            // if(color % 2 == colorSwap){
+            //     if(typeof this.blackAgent.updateQValue === 'function'){
+            //         this.blackAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward * (-1));
+            //         //console.log("Updated Q value white");
+                    
+            //     }
+            // }else{
+            //     if(typeof this.whiteAgent.updateQValue === 'function'){
+            //         this.whiteAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward * (-1));
+            //         //console.log("Updated Q value black");
+            //     }
+            // }
+        }else if(this._checkLose((color + 1) % 2)){
+            this.reward += Rewards.WIN;
+            // if(color % 2 == colorSwap){
+            //     if(typeof this.blackAgent.updateQValue === 'function'){
+            //         this.blackAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward * (-1));
+            //         //console.log("Updated Q value white");
+                    
+            //     }
+            // }else{
+            //     if(typeof this.whiteAgent.updateQValue === 'function'){
+            //         this.whiteAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward * (-1));
+            //         //console.log("Updated Q value black");
+            //     }
+            // }
+        }
+
         if(color % 2 == colorSwap){
             if(typeof this.whiteAgent.updateQValue === 'function'){
                 this.whiteAgent.updateQValue(oldPieces, this.board.pieces, move, this.reward);
@@ -200,7 +230,7 @@ class Simulation {
                 }
             }
         }
-        this.reward -= Rewards.LOSE;
+        //this.reward -= Rewards.LOSE;
         return true;
     }
 

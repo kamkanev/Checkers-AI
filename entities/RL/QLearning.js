@@ -8,6 +8,8 @@ class QLearing {
         this.epsilonMin = epsilonMin
     }
 
+    //TODO: implement off policy learning
+
     chooseAction(state, actions){
 
         if(Math.random() < this.explorationRate){

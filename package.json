@@ -1,5 +1,32 @@
 {
   "dependencies": {
-    "jquery": "^3.7.1"
-  }
+    "express": "^4.21.2",
+    "jquery": "^3.7.1",
+    "socket": "^0.14.38",
+    "socket.io": "^4.8.1"
+  },
+  "name": "checkers-ai",
+  "description": "A checkers AI project for the course Introduction to Reinforcement Learning.",
+  "version": "1.0.0",
+  "main": "train.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node train.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamkanev/Checkers-AI.git"
+  },
+  "keywords": [
+    "ai",
+    "rl",
+    "checkers"
+  ],
+  "author": "Kamen Kanev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kamkanev/Checkers-AI/issues"
+  },
+  "homepage": "https://github.com/kamkanev/Checkers-AI#readme"
 }

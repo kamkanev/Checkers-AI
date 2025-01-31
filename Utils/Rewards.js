@@ -5,3 +5,6 @@ const Rewards = {
     PERPIECE: 2,
     KING: 5
 }
+if(module){
+    module.exports = Rewards;
+}

@@ -43,3 +43,6 @@ class Point {
         return res;
     }
 }
+if(module){
+    module.exports = Point;
+}

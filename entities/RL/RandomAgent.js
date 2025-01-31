@@ -9,3 +9,6 @@ class RandomAgent {
         
     }
 }
+if(module){
+    module.exports = RandomAgent;
+}

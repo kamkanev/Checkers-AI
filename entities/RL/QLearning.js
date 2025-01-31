@@ -1,14 +1,14 @@
 class QLearing {
-    constructor(learningRate = 0.1, discountFactor = 0.7, epsilon = 1, epsilonMin = 0.1, epsilonDicay = 0.995) {
+    constructor(learningRate = 0.1, discountFactor = 0.7, epsilon = 1, epsilonMin = 0.1, epsilonDecay = 0.995) {
         this.qTable = {};
         this.learingRate = learningRate;
         this.explorationRate = epsilon;
-        this.explorationDecay = epsilonDicay;
+        this.explorationDecay = epsilonDecay;
         this.discountFactor = discountFactor;
-        this.epsilonMin = epsilonMin
-    }
+        this.epsilonMin = epsilonMin;
 
-    //TODO: implement off policy learning
+        this.stepSize = 1;
+    }
 
     chooseAction(state, actions){
 
@@ -52,7 +52,7 @@ class QLearing {
         }
 
         var currQValue = this.qTable[JSON.stringify(state)][JSON.stringify(action)] || 0;
-        var maxFutureQValue = -Infinity;
+        var maxFutureQValue = 0;
             for(var act in this.qTable[JSON.stringify(newState)]){
                 if(this.qTable[JSON.stringify(newState)][act] > maxFutureQValue){
                     maxFutureQValue = this.qTable[JSON.stringify(newState)][act];
@@ -71,9 +71,14 @@ class QLearing {
 
     }
 
-    decayEpsilon(){
+    decayEpsilon(episode){
 
-        this.explorationRate = Math.max(this.epsilonMin, this.explorationRate * this.explorationDecay);
+        if(episode % this.stepSize == 0){
+            this.explorationRate = Math.max(this.epsilonMin, this.explorationRate * this.explorationDecay);
+        }
         
     }
+}
+if(module){
+    module.exports = QLearing;
 }

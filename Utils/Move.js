@@ -71,7 +71,7 @@ class Move {
         if(move.type == "M"){
             points = points.concat(mp);
         }else{
-            var currP = new Point(0, 0);
+            var currP = {x: 0, y: 0};
             for(var i = 0; i < mp.length; i++){
                 points.push(
                     {x: mp[i].x*2 + currP.x,
@@ -90,4 +90,7 @@ class Move {
         return points;
 
     }
+}
+if(module){
+    module.exports = Move;
 }
